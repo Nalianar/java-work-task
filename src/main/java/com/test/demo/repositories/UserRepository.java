@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
@@ -25,5 +26,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT new com.test.demo.dto.UserDto(u.id, u.login, u.token, u.password) " +
             "FROM User u " +
             "WHERE u.login = ?1")
-    UserDto findByLogin(String username);
+    UserDto getByLogin(String username);
+
+    Optional<User> findByLogin(String username);
 }

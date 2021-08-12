@@ -71,10 +71,10 @@ public class UserService {
     public User login(UserForm userForm) {
 
         User user = new User();
-        user.setId(userRepository.findByLogin(userForm.getLogin()).getId());
-        user.setLogin(userRepository.findByLogin(userForm.getLogin()).getLogin());
-        user.setToken(userRepository.findByLogin(userForm.getLogin()).getToken());
-        user.setPassword(userRepository.findByLogin(userForm.getLogin()).getPassword());
+        user.setId(userRepository.getByLogin(userForm.getLogin()).getId());
+        user.setLogin(userRepository.getByLogin(userForm.getLogin()).getLogin());
+        user.setToken(userRepository.getByLogin(userForm.getLogin()).getToken());
+        user.setPassword(userRepository.getByLogin(userForm.getLogin()).getPassword());
 
         if(user.getPassword().equals(userForm.getPassword()))
             return user;

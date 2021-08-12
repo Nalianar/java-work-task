@@ -5,6 +5,9 @@ import com.test.demo.form.UserForm;
 import com.test.demo.model.User;
 import com.test.demo.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +24,10 @@ public class UserController {
         return userService.createUser(userForm);
     }
 
+//    @PostAuthorize("hasPermission(returnObject, )") dunno how to send permission in app
     @GetMapping("/top-users")
     public Set<UserDto> returnTopUsers() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return userService.returnTopUsers();
     }
 

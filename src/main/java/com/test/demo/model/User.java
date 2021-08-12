@@ -31,6 +31,11 @@ public class User {
     @OneToMany(mappedBy="user", fetch=FetchType.EAGER)
     private Set<Card> cards;
 
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToMany(cascade = CascadeType.ALL)
+    private Set<UserGroup> groups;
+
     public static UserDto toDto(User user){
         return UserDto.builder()
                 .id(user.id)

@@ -34,7 +34,7 @@ public class CardService {
         card.setCurrency(cardDto.getCurrency());
         card.setUser(userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("Cannot find user with id " + userId)));
-        if(isUserNotAuth(card)) return null;
+        isUserNotAuthWithCurrentCard(card);
         return cardRepository.save(card);
     }
 
@@ -45,7 +45,7 @@ public class CardService {
         Card sender = cardRepository.findById(transactionForm.getSenderId())
                 .orElseThrow(() -> new RuntimeException("Cannot find sender card with id " + transactionForm.getSenderId()));
 
-        if (isUserNotAuth(sender)) return null;
+        isUserNotAuthWithCurrentCard(sender);
 
         Transaction tr = new Transaction();
         tr.setRecipient(recipient);
@@ -61,14 +61,13 @@ public class CardService {
         return transactionRepository.save(tr);
     }
 
-    private boolean isUserNotAuth(Card card) {
+    private void isUserNotAuthWithCurrentCard(Card card) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(!authentication.isAuthenticated()
                 || !authentication.getName()
                 .equals(card.getUser().getLogin())){
-            return true;
+            throw new RuntimeException("User is not authenticated with card");
         }
-        return false;
     }
 
 
@@ -78,7 +77,7 @@ public class CardService {
         Card card = cardRepository.findById(transactionForm.getRecipientId())
                 .orElseThrow(() -> new RuntimeException("Cannot find recipient card with id " + transactionForm.getRecipientId()));
 
-        if(isUserNotAuth(card)) return null;
+        isUserNotAuthWithCurrentCard(card);
         Transaction transaction = new Transaction();
         transaction.setRecipient(card);
         transaction.setTransactionAmount(transactionForm.getTransactionAmount());
